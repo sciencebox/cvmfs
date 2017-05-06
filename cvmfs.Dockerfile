@@ -56,14 +56,14 @@ RUN yum -y update && \
 RUN echo -e \
 "CVMFS_QUOTA_LIMIT=20000\n\
 CVMFS_CACHE_BASE=/var/cache/cvmfs\n\
-CVMFS_HTTP_PROXY='http://ca-proxy.cern.ch:3128;http://ca-proxy-meyrin.cern.ch:3128;http://ca01.cern.ch:3128|http://ca02.cern.ch:3128|http://ca03.cern.ch:3128|http://ca04.cern.ch:3128|http://ca05.cern.ch:3128|http://ca06.cern.ch:3128'\n\
+CVMFS_HTTP_PROXY='http://ca-proxy.cern.ch:3128;http://ca-proxy-meyrin.cern.ch:3128;http://ca01.cern.ch:3128|http://ca02.cern.ch:3128|http://ca03.cern.ch:3128|http://ca04.cern.ch:3128|http://ca05.cern.ch:3128|http://ca06.cern.ch:3128;DIRECT'\n\
 CVMFS_REPOSITORIES='sft.cern.ch'" \
 		> /etc/cvmfs/default.local
 
 
 # ----- Define the mount points in fstab and prepare the directories ----- #
 RUN echo "#<cvmfs_repo> <mnt_dir> <fs_type> <options> <dump> <fsck>" > fstab_temp && \
-	for i in `cat /etc/cvmfs/default.local | grep CVMFS_REPOSITORIES | cut -d = -f 2- | tr -d "'" | tr "," " "`; do echo $i /cvmfs/$i cvmfs defaults 0 0 >> fstab_temp; done && \
+	for i in `cat /etc/cvmfs/default.local | grep -v '^#' | grep CVMFS_REPOSITORIES | cut -d = -f 2- | tr -d "'" | tr "," " "`; do echo $i /cvmfs/$i cvmfs defaults 0 0 >> fstab_temp; done && \
 	cat fstab_temp | column -t > /etc/fstab && \
 	rm fstab_temp
 
