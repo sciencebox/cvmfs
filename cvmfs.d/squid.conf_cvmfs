@@ -1,0 +1,25 @@
+
+
+
+# Configure cache sizes and access control for CVMFS
+max_filedesc 8192
+maximum_object_size 1024 MB
+cache_mem 128 MB
+maximum_object_size_in_memory 128 KB
+# 10 GB disk cache
+cache_dir ufs /var/spool/squid 10000 16 256
+
+# Configure access to Stratum 1 servers
+acl cvmfs dst cvmfs-stratum-one.cern.ch
+acl cvmfs dst cernvmfs.gridpp.rl.ac.uk
+acl cvmfs dst cvmfs.racf.bnl.gov
+acl cvmfs dst cvmfs02.grid.sinica.edu.tw
+acl cvmfs dst cvmfs.fnal.gov
+acl cvmfs dst cvmfs-atlas-nightlies.cern.ch
+#acl cvmfs dst cvmfs-egi.gridpp.rl.ac.uk
+acl cvmfs dst klei.nikhef.nl
+acl cvmfs dst cvmfsrepo.lcg.triumf.ca
+#acl cvmfs dst cvmfsrep.grid.sinica.edu.tw
+#acl cvmfs dst cvmfs-s1bnl.opensciencegrid.org
+#acl cvmfs dst cvmfs-s1fnal.opensciencegrid.org
+http_access allow cvmfs
