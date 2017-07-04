@@ -30,5 +30,15 @@ mount -a && mount --make-shared /cvmfs
 
 # Probe the CVMFS endpoints for acknowledgement
 cvmfs_config probe
+
+# Pre-fetch resources from CVMFS Stratum 1
+STRAT1_ENDPOINT="http://cvmfs-stratum-one.cern.ch/"
+USER_SPAWN='/root/prefetch_uri_files/user_spawn_LCG88.uri' # Spawn user container
+# PYTHON2='/root/prefetch_uri_files/python2.uri'           # Python 2 Notebook
+# ROOT_CPP='/root/prefetch_uri_files/root_cpp.uri'         # ROOT C++ Notebook
+# R='/root/prefetch_uri_files/r.uri'                       # R Notebook
+./root/prefetch_cvmfs.sh $STRAT1_ENDPOINT $USER_SPAWN
+
+# Done
 echo 'Ready...' && tail -f /dev/null
 

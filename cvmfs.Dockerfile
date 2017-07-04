@@ -41,13 +41,18 @@ RUN yum -y update
 RUN yum -y install \
 	squid \
 	cvmfs \
-	cvmfs-config-default
+	cvmfs-config-default \
+	wget
 
 
 # ----- Copy configuration files ----- #
 COPY cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
 COPY cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
 COPY cvmfs.d/cvmfs_start.sh /root/cvmfs_start.sh
+
+# ----- Copy the list of URIs to be pre-fetched when starting squid/CVMFS ----- #
+COPY cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
+COPY cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
 
 
 # ----- Run the setup script in the container ----- #
