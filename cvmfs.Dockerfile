@@ -1,3 +1,12 @@
+### DOCKER FILE FOR eos-fuse IMAGE ###
+
+###
+# export RELEASE_VERSION=":v0"
+# docker build -t gitlab-registry.cern.ch/cernbox/boxedhub/cvmfs${RELEASE_VERSION} -f cvmfs.Dockerfile .
+# docker login gitlab-registry.cern.ch
+# docker push gitlab-registry.cern.ch/cernbox/boxedhub/cvmfs${RELEASE_VERSION}
+###
+
 # Dockerfile to create the container for CMVFS
 # NOTE: The container needs SYS_ADMIN capabilities (--cap-add SYS_ADMIN) and access to /dev/fuse on the host machine (--device /dev/fuse)
 #
@@ -21,8 +30,8 @@
 # See also: https://github.com/docker/docker/pull/17034
 # and some random searches on google for 'mount propagation in docker'
 
-# ----- Use CERN cc7 as base image for CVMFS ----- #
-FROM cern/cc7-base:20170113
+
+FROM cern/cc7-base:20170920
 
 MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
@@ -34,10 +43,7 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 
-RUN yum -y install yum-plugin-ovl # See http://unix.stackexchange.com/questions/348941/rpmdb-checksum-is-invalid-trying-to-install-gcc-in-a-centos-7-2-docker-image
-
 # ----- Install  Squid proxy and CVMFS software ----- #
-RUN yum -y update
 RUN yum -y install \
 	squid \
 	cvmfs \
@@ -46,14 +52,15 @@ RUN yum -y install \
 
 
 # ----- Copy configuration files ----- #
-COPY cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
-COPY cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
-COPY cvmfs.d/cvmfs_start.sh /root/cvmfs_start.sh
+ADD ./cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
+ADD ./cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
+
 
 # ----- Copy the list of URIs to be pre-fetched when starting squid/CVMFS ----- #
-COPY cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
-COPY cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
+ADD ./cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
+ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
 
 
 # ----- Run the setup script in the container ----- #
-CMD ["bash", "/root/cvmfs_start.sh"]
+ADD ./cvmfs.d/start.sh /root/start.sh
+CMD ["bash", "/root/start.sh"]
