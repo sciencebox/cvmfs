@@ -3,18 +3,24 @@
 #CVMFS_HTTP_PROXY='http://ca-proxy.cern.ch:3128;http://ca-proxy-meyrin.cern.ch:3128;http://ca01.cern.ch:3128|http://ca02.cern.ch:3128|http://ca03.cern.ch:3128|http://ca04.cern.ch:3128|http://ca05.cern.ch:3128|http://ca06.cern.ch:3128'
 
 # Outside CERN
-#CVMFS_HTTP_PROXY='DIRECT'
+CVMFS_HTTP_PROXY='DIRECT'
+
+# Through local squid proxy
+#CVMFS_HTTP_PROXY='http://localhost:3128'
+
+# Enable geo awarness
+CVMFS_USE_GEOAPI=yes		# See: https://cvmfs.readthedocs.io/en/2.4/cpt-configure.html#ordering-of-servers-according-to-geographic-proximity
+
+# Cache config (for CVMFS v2.4 and above)
+export CVMFS_CACHE_PRIMARY=SWAN
+export CVMFS_CACHE_SWAN_TYPE=posix
+export CVMFS_CACHE_SWAN_SHARED=yes
+export CVMFS_CACHE_SWAN_BASE=/var/lib/cvmfs
+export CVMFS_CACHE_SWAN_QUOTA_LIMIT=10000
+
+# Needed repos
+CVMFS_REPOSITORIES='sft.cern.ch,sft-nightlies.cern.ch'
 
 ### All available repos (as of May 2017)
 #CVMFS_REPOSITORIES='alice.cern.ch,alice-nightlies.cern.ch,alice-ocdb.cern.ch,atlas.cern.ch,atlas-condb.cern.ch,boss.cern.ch,cms.cern.ch,fcc.cern.ch,geant4.cern.ch,grid.cern.ch,lhcb.cern.ch,na61.cern.ch,sft.cern.ch,sft-nightlies.cern.ch'
-
-
-CVMFS_QUOTA_LIMIT='20000'
-CVMFS_CACHE_BASE='/var/cache/cvmfs'
-
-# Go through the local Squid proxy
-CVMFS_HTTP_PROXY='http://localhost:3128'
-
-# Repos required by SWAN for additional software
-CVMFS_REPOSITORIES='sft.cern.ch,sft-nightlies.cern.ch'
-
+#

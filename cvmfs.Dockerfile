@@ -42,25 +42,35 @@ ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
+# NOTE: Since cvmfs:v0.1 (2017/11/06), local squid proxy has been disasbled 
+# 	as CVMFS itself has a better cache handling.
+# 	Previous code has been kept in the need of reverting modifications.
 
 # ----- Install  Squid proxy and CVMFS software ----- #
+#RUN yum -y install \
+#	squid \
+#	cvmfs \
+#	cvmfs-config-default \
+#	wget
+
+
+# ----- Install CVMFS ----- #
 RUN yum -y install \
-	squid \
 	cvmfs \
-	cvmfs-config-default \
-	wget
+	cvmfs-config-default
 
 
 # ----- Copy configuration files ----- #
-ADD ./cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
+#ADD ./cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
 ADD ./cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
 
 
 # ----- Copy the list of URIs to be pre-fetched when starting squid/CVMFS ----- #
-ADD ./cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
-ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
+#ADD ./cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
+#ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
 
 
 # ----- Run the setup script in the container ----- #
 ADD ./cvmfs.d/start.sh /root/start.sh
 CMD ["bash", "/root/start.sh"]
+
