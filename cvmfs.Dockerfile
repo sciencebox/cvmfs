@@ -53,6 +53,14 @@ ENV LC_ALL en_US.UTF-8
 #	cvmfs \
 #	cvmfs-config-default \
 #	wget
+#
+# Copy configuration files for squid
+#ADD ./cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
+#
+# Copy the list of URIs to be pre-fetched when starting squid/CVMFS
+#ADD ./cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
+#ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
+#
 
 
 # ----- Install CVMFS ----- #
@@ -62,13 +70,7 @@ RUN yum -y install \
 
 
 # ----- Copy configuration files ----- #
-#ADD ./cvmfs.d/squid.conf_cvmfs /etc/squid/squid.conf_cvmfs
-ADD ./cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
-
-
-# ----- Copy the list of URIs to be pre-fetched when starting squid/CVMFS ----- #
-#ADD ./cvmfs.d/prefetch_cvmfs.sh /root/prefetch_cvmfs.sh
-#ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
+ADD ./cvmfs.d/cvmfs_default.local /root/cvmfs_default.local
 
 
 # ----- Start the CVMFS client ----- #
