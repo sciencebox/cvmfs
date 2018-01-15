@@ -1,4 +1,4 @@
-### DOCKER FILE FOR eos-fuse IMAGE ###
+### DOCKER FILE FOR cvmfs IMAGE ###
 
 ###
 # export RELEASE_VERSION=":v0"
@@ -42,11 +42,12 @@ ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
+
 # NOTE: Since cvmfs:v0.1 (2017/11/06), local squid proxy has been disasbled 
 # 	as CVMFS itself has a better cache handling.
 # 	Previous code has been kept in the need of reverting modifications.
 
-# ----- Install  Squid proxy and CVMFS software ----- #
+# ----- Install Squid proxy and CVMFS software ----- #
 #RUN yum -y install \
 #	squid \
 #	cvmfs \
@@ -70,7 +71,7 @@ ADD ./cvmfs.d/cvmfs_default.local /etc/cvmfs/default.local
 #ADD ./cvmfs.d/prefetch_uri_files/* /root/prefetch_uri_files/
 
 
-# ----- Run the setup script in the container ----- #
+# ----- Start the CVMFS client ----- #
 ADD ./cvmfs.d/start.sh /root/start.sh
-CMD ["bash", "/root/start.sh"]
+CMD ["/bin/bash", "/root/start.sh"]
 
