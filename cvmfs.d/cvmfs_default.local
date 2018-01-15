@@ -1,22 +1,21 @@
 ### Configuration without squid proxy
-# Inside CERN
-#CVMFS_HTTP_PROXY='http://ca-proxy.cern.ch:3128;http://ca-proxy-meyrin.cern.ch:3128;http://ca01.cern.ch:3128|http://ca02.cern.ch:3128|http://ca03.cern.ch:3128|http://ca04.cern.ch:3128|http://ca05.cern.ch:3128|http://ca06.cern.ch:3128'
 
-# Outside CERN
-CVMFS_HTTP_PROXY='DIRECT'
-
-# Through local squid proxy
-#CVMFS_HTTP_PROXY='http://localhost:3128'
+# CVMFS HTTP endpoint
+CVMFS_HTTP_PROXY='%%%CVMFS_HTTP_PROXY%%%'
 
 # Enable geo awarness
 CVMFS_USE_GEOAPI=yes		# See: https://cvmfs.readthedocs.io/en/2.4/cpt-configure.html#ordering-of-servers-according-to-geographic-proximity
 
+# CVMFS Config
+CVMFS_CACHE_BASE='/var/lib/cvmfs'
+CVMFS_FORCE_SIGNING='yes'
+
 # Cache config (for CVMFS v2.4 and above)
-export CVMFS_CACHE_PRIMARY=SWAN
-export CVMFS_CACHE_SWAN_TYPE=posix
-export CVMFS_CACHE_SWAN_SHARED=yes
-export CVMFS_CACHE_SWAN_BASE=/var/lib/cvmfs
-export CVMFS_CACHE_SWAN_QUOTA_LIMIT=10000
+export CVMFS_CACHE_PRIMARY=DISK
+export CVMFS_CACHE_DISK_TYPE=posix
+export CVMFS_CACHE_DISK_SHARED=yes
+export CVMFS_CACHE_DISK_BASE=/var/lib/cvmfs
+export CVMFS_CACHE_DISK_QUOTA_LIMIT=10000
 
 # Needed repos
 CVMFS_REPOSITORIES='sft.cern.ch,sft-nightlies.cern.ch'

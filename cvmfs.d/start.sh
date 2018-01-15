@@ -42,21 +42,33 @@ case $DEPLOYMENT_TYPE in
 esac
 
 
-### Deprecated ###
-: '''
-# Configure local Squid proxy
-echo "Starting Squid..."
-cat /etc/squid/squid.conf_cvmfs >> /etc/squid/squid.conf
-squid -z # Init the cache space on disk
-sleep 3
-squid
-sleep 3
-'''
-
-# Configure CVMFS 
-echo "Mounting CVMFS repositories..."
+# Configure CVMFS Upstream Connection according to the context
+case $CVMFS_UPSTREAM_CONNECTION in
+  "direct")
+    sed "s#%%%CVMFS_HTTP_PROXY%%%#DIRECT#" /root/cvmfs_default.local > /etc/cvmfs/default.local
+  ;;
+  ###
+  "squid")
+    if [ -z "$CVMFS_SQUID_ENDPOINT" ]; then
+      CVMFS_SQUID_ENDPOINT="http://cvmfssquid.boxed.svc.cluster.local:3128"
+      echo "WARNING: Squid proxy URL not defined."
+      echo "WARNING: Defaulting to $CVMFS_SQUID_ENDPOINT"
+    fi
+    sed "s#%%%CVMFS_HTTP_PROXY%%%#${CVMFS_SQUID_ENDPOINT}#" /root/cvmfs_default.local > /etc/cvmfs/default.local
+  ;;
+  ###
+  "cern")
+    sed "s#%%%CVMFS_HTTP_PROXY%%%#http://ca-proxy.cern.ch:3128;http://ca-proxy-meyrin.cern.ch:3128;http://ca01.cern.ch:3128|http://ca02.cern.ch:3128|http://ca03.cern.ch:3128|http://ca04.cern.ch:3128|http://ca05.cern.ch:3128|http://ca06.cern.ch:3128#" /root/cvmfs_default.local > /etc/cvmfs/default.local
+  ;;
+  ###
+  *)
+    echo "WARNING: Connection method to upstram source not defined."
+    echo "WARNING: Defaulting to 'direct'"
+    sed "s/%%%CVMFS_HTTP_PROXY%%%/DIRECT/" /root/squid.conf_cvmfs > /etc/cvmfs/default.local
+esac
 
 # Define mount points according to the list of desired repositories
+echo "Mounting CVMFS repositories..."
 echo "#<cvmfs_repo> <mnt_dir> <fs_type> <options> <dump> <fsck>" > fstab_temp
 for i in `cat /etc/cvmfs/default.local | grep -v '^#' | grep CVMFS_REPOSITORIES | cut -d = -f 2- | tr -d "'" | tr "," " "`; 
 do
@@ -69,22 +81,11 @@ cat fstab_temp | column -t > /etc/fstab
 mkdir -p `tail -n+2 /etc/fstab | tr -s ' ' | cut -d ' ' -f 2`
 
 # Mount CVMFS repositories and set the mount points as shared
-mount -a #&& mount --make-shared /cvmfs
+mount -a
 
 # Probe the CVMFS endpoints for acknowledgement
 echo "Probing CVMFS endpoints..."
 cvmfs_config probe
-
-### Deprecated ###
-: '''
-# Pre-fetch resources from CVMFS Stratum 1
-STRAT1_ENDPOINT="http://cvmfs-stratum-one.cern.ch/"
-USER_SPAWN="/root/prefetch_uri_files/user_spawn_LCG88.uri" # Spawn user container
-# PYTHON2="/root/prefetch_uri_files/python2.uri"           # Python 2 Notebook
-# ROOT_CPP="/root/prefetch_uri_files/root_cpp.uri"         # ROOT C++ Notebook
-# R="/root/prefetch_uri_files/r.uri"                       # R Notebook
-bash /root/prefetch_cvmfs.sh $STRAT1_ENDPOINT $USER_SPAWN
-'''
 
 # Done
 echo ""
