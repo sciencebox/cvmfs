@@ -1,4 +1,8 @@
-### Configuration without squid proxy
+### Configuration for CVMFS client
+# Supports multiple scenarios by configuring CVMFS_HTTP_PROXY including:
+# a) Connection to direct upstream StratumOne server
+# b) Connection to local, cluster-wise, squid proxy (used in Kubernetes)
+# c) Connection to internal CERN proxies -- works from within CERN network only
 
 # CVMFS HTTP endpoint
 CVMFS_HTTP_PROXY='%%%CVMFS_HTTP_PROXY%%%'
