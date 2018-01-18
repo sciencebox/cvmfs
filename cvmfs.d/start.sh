@@ -90,5 +90,17 @@ cvmfs_config probe
 # Done
 echo ""
 echo "Ready!"
-sleep infinity
+
+# Pre-fetch packages and keep the container running forever
+SLEEP_TIME=15m
+while true;
+do
+  echo "`date +%D' '%T` -- Prefetching packages for $SOFTWARE_STACK $PLATFORM..."
+  source /cvmfs/sft.cern.ch/lcg/views/$SOFTWARE_STACK/$PLATFORM/setup.sh 
+  timeout 60s python -m ipykernel > /dev/null 2>&1
+  timeout 60s python -m JupyROOT.kernel.rootkernel > /dev/null 2>&1
+
+  echo "`date +%D' '%T` -- Sleeping for $SLEEP_TIME..."
+  sleep $SLEEP_TIME
+done
 
