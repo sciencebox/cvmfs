@@ -20,21 +20,15 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 
-# ----- Install Squid proxy and CVMFS software ----- #
+# ----- Install Squid proxy and base configuration file ----- #
 RUN yum -y install \
-	squid \
-	cvmfs \
-        cvmfs-config-default \
-	wget
+	squid
+ADD ./cvmfssquid.d/squid.conf_cvmfs /root/squid.conf_cvmfs
 
 
 # ----- Install supervisord and base configuration file ----- #
 RUN yum -y install supervisor
 ADD ./supervisord.d/supervisord.conf /etc/supervisord.conf
-
-
-# ----- Copy configuration files for squid ----- #
-ADD ./cvmfssquid.d/squid.conf_cvmfs /root/squid.conf_cvmfs
 
 
 # ----- Start SQUID proxy ----- #
