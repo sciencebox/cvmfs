@@ -31,7 +31,7 @@
 # and some random searches on google for 'mount propagation in docker'
 
 
-FROM cern/cc7-base:20170920
+FROM cern/cc7-base:20180112
 
 MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
