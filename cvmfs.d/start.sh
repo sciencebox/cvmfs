@@ -69,13 +69,13 @@ esac
 
 # Define mount points according to the list of desired repositories
 echo "Mounting CVMFS repositories..."
-echo "#<cvmfs_repo> <mnt_dir> <fs_type> <options> <dump> <fsck>" > fstab_temp
+echo "#<cvmfs_repo> <mnt_dir> <fs_type> <options> <dump> <fsck>" > /tmp/fstab_temp
 for i in `cat /etc/cvmfs/default.local | grep -v '^#' | grep CVMFS_REPOSITORIES | cut -d = -f 2- | tr -d "'" | tr "," " "`; 
 do
-	echo $i /cvmfs/$i cvmfs defaults,_netdev,nodev 0 0 >> fstab_temp
+	echo $i /cvmfs/$i cvmfs defaults,_netdev,nodev 0 0 >> /tmp/fstab_temp
 done
-cat fstab_temp | column -t > /etc/fstab
-/bin/rm fstab_temp
+cat /tmp/fstab_temp | column -t > /etc/fstab
+/bin/rm /tmp/fstab_temp
 
 # Make the directories required for the CVMFS mount
 mkdir -p `tail -n+2 /etc/fstab | tr -s ' ' | cut -d ' ' -f 2`
