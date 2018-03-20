@@ -64,7 +64,7 @@ case $CVMFS_UPSTREAM_CONNECTION in
   *)
     echo "WARNING: Connection method to upstram source not defined."
     echo "WARNING: Defaulting to 'direct'"
-    sed "s/%%%CVMFS_HTTP_PROXY%%%/DIRECT/" /root/squid.conf_cvmfs > /etc/cvmfs/default.local
+    sed "s#%%%CVMFS_HTTP_PROXY%%%#DIRECT#" /root/cvmfs_default.local > /etc/cvmfs/default.local
 esac
 
 # Define mount points according to the list of desired repositories
