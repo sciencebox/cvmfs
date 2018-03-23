@@ -31,7 +31,7 @@
 # and some random searches on google for 'mount propagation in docker'
 
 
-FROM cern/cc7-base:20180112
+FROM cern/cc7-base:20180316
 
 MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
@@ -68,12 +68,12 @@ RUN yum -y install \
 	cvmfs \
 	cvmfs-config-default
 
-
-# ----- Copy configuration files ----- #
+# Copy configuration files
 ADD ./cvmfs.d/cvmfs_default.local /root/cvmfs_default.local
 
 
 # ----- Start the CVMFS client ----- #
 ADD ./cvmfs.d/start.sh /root/start.sh
+ADD ./cvmfs.d/stop.sh /root/stop.sh
 CMD ["/bin/bash", "/root/start.sh"]
 
