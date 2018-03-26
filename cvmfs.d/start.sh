@@ -75,32 +75,16 @@ do
 	echo $i /cvmfs/$i cvmfs defaults,_netdev,nodev 0 0 >> /tmp/fstab_temp
 done
 cat /tmp/fstab_temp | column -t > /etc/fstab
-/bin/rm /tmp/fstab_temp
+rm -f /tmp/fstab_temp
 
-# Make the directories required for the CVMFS mount
+# Make the directories required for CVMFS and mount the repositories
 mkdir -p `tail -n+2 /etc/fstab | tr -s ' ' | cut -d ' ' -f 2`
-
-# Mount CVMFS repositories and set the mount points as shared
 mount -a
 
 # Probe the CVMFS endpoints for acknowledgement
 echo "Probing CVMFS endpoints..."
 cvmfs_config probe
 
-# Done
-echo ""
-echo "Ready!"
-
-# Pre-fetch packages and keep the container running forever
-SLEEP_TIME=15m
-while true;
-do
-  echo "`date +%D' '%T` -- Prefetching packages for $SOFTWARE_STACK $PLATFORM..."
-  source /cvmfs/sft.cern.ch/lcg/views/$SOFTWARE_STACK/$PLATFORM/setup.sh 
-  timeout 60s python -m ipykernel > /dev/null 2>&1
-  timeout 60s python -m JupyROOT.kernel.rootkernel > /dev/null 2>&1
-
-  echo "`date +%D' '%T` -- Sleeping for $SLEEP_TIME..."
-  sleep $SLEEP_TIME
-done
+# Give control to supercronic to handle prefetching from CVMFS
+/usr/bin/supercronic /etc/supercronic.d/cvmfs_prefetch.cronjob
 

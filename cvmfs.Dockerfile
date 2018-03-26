@@ -72,6 +72,14 @@ RUN yum -y install \
 ADD ./cvmfs.d/cvmfs_default.local /root/cvmfs_default.local
 
 
+# ----- Install supercronic and the cronjob to prefetch from CVMFS ----- #
+RUN yum -y install wget
+RUN wget -q https://github.com/aptible/supercronic/releases/download/v0.1.5/supercronic-linux-amd64 -O /usr/bin/supercronic
+RUN chmod +x /usr/bin/supercronic
+ADD ./cvmfs.d/cvmfs_prefetch.cronjob /etc/supercronic.d/cvmfs_prefetch.cronjob
+ADD ./cvmfs.d/cvmfs_prefetch.sh /etc/supercronic.d/cvmfs_prefetch.sh
+
+
 # ----- Start the CVMFS client ----- #
 ADD ./cvmfs.d/start.sh /root/start.sh
 ADD ./cvmfs.d/stop.sh /root/stop.sh
