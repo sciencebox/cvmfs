@@ -90,7 +90,7 @@ case $CVMFS_UPSTREAM_CONNECTION in
     sed "s#%%%CVMFS_HTTP_PROXY%%%#DIRECT#" /root/cvmfs_default.local > /etc/cvmfs/default.local
 esac
 
-# Define mount points, create directories, and mount the repositories 
+# Define mount points, create directories, and mount the repositories
 echo "Mounting CVMFS repositories..."
 echo "#<cvmfs_repo> <mnt_dir> <fs_type> <options> <dump> <fsck>" > /tmp/fstab_temp
 for i in `cat /etc/cvmfs/default.local | grep -v '^#' | grep CVMFS_REPOSITORIES | cut -d = -f 2- | tr -d "'" | tr "," " "`; 
@@ -105,6 +105,11 @@ mount -a
 # Probe the CVMFS endpoints for acknowledgement
 echo "Probing CVMFS repositories..."
 cvmfs_config probe
+
+# Prefetch packages
+echo "Prefetching packages for $SOFTWARE_STACK, $PLATFORM..."
+bash /etc/supercronic.d/cvmfs_prefetch.sh
+echo "Done."
 
 # Give control to supercronic to handle prefetching from CVMFS
 echo "Starting supercronic to keep the local cache warm..."
