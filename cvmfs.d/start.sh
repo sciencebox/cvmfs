@@ -22,11 +22,12 @@ case $DEPLOYMENT_TYPE in
     then
       echo "Nothing to cleanup."
     else
-      echo "Cleaning up: $mounted_folders"
+      echo "Cleaning up: $mounted_folders"      # It might fail if user's containers are running
       for i in $mounted_folders
       do
         umount $i
-        rmdir $i        # It might fail if user's containers are running
+        umount -l $i
+        rmdir $i
       done
     fi
     ;;
