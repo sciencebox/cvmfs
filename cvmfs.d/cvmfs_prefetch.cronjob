@@ -1,1 +1,0 @@
-*/15 * * * * /usr/bin/timeout 10m /usr/bin/bash /etc/supercronic.d/cvmfs_prefetch.sh
