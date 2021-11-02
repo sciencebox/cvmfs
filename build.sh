@@ -4,7 +4,7 @@
 BASE_TAG='gitlab-registry.cern.ch/sciencebox/docker-images/cvmfs'
 
 # Specify cvmfs version to be installed (or comment out to use the latest)
-CVMFS_VERSION='2.8.1'
+CVMFS_VERSION='2.8.2'
 
 # Build the Docker image
 if [ -z $CVMFS_VERSION ]; then
