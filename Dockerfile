@@ -15,6 +15,14 @@ RUN yum -y install \
     yum clean all && \
     rm -rf /var/cache/yum
 
+# Install essential packages for prefetching JupyROOT kernel from LCG views
+RUN yum -y install \
+       gcc \
+       gcc-c++ \
+       which && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
 # Install CVMFS client
 ARG CVMFS_VERSION
 ADD ./repos.d/*.repo /etc/yum.repos.d/
