@@ -5,7 +5,7 @@ Docker image with CVMFS client.
 
 ### Usage
 - The image only comes with the software. Configuration files for `cvmfs` are not provided in the Docker image;
-- Consider using in combination with Helm charts (or similar tools for container configuration) to create the expected configuration files;
+- Consider using in combination with Helm charts (or similar tools for container configuration) to create the expected configuration files -- See [ScienceBox CVMFS chart](https://github.com/sciencebox/charts/tree/master/cvmfs)
 
 #### Example usage
 - Provide the configuration file `/etc/cvmfs/default.local` with relevant configuration parameters (e.g., cache size, http proxy, ...)
