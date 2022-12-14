@@ -1,4 +1,4 @@
-FROM cern/cc7-base:20220202-1.x86_64
+FROM cern/cc7-base:20221201-1.x86_64
 
 MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
