@@ -19,6 +19,7 @@ RUN yum -y install \
 RUN yum -y install \
        gcc \
        gcc-c++ \
+       util-linux \
        which && \
     yum clean all && \
     rm -rf /var/cache/yum
