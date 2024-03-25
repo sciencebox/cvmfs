@@ -4,4 +4,4 @@ baseurl=http://cern.ch/cvmrepo/yum/cvmfs/EL/7/x86_64
 enabled=1
 priority=1
 gpgcheck=0
-includepkgs=cvmfs cvmfs-keys cvmfs-server cvmfs-config-default
+includepkgs=cvmfs cvmfs-keys cvmfs-server cvmfs-config-default cvmfs-libs
