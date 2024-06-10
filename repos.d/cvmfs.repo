@@ -1,6 +1,6 @@
 [cvmfs]
-name=CVMFS yum repository for el7
-baseurl=http://cern.ch/cvmrepo/yum/cvmfs/EL/7/x86_64
+name=CVMFS yum repository for el$releasever
+baseurl=http://cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/x86_64
 enabled=1
 priority=1
 gpgcheck=0

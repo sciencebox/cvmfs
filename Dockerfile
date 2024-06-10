@@ -1,15 +1,13 @@
-FROM cern/cc7-base:20240301-1
+FROM cern/alma9-base:20240501-1
 
 MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
-# Install yum priorities plugin
-RUN yum -y install \
-       yum-plugin-priorities && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-
 # Install supervisord
 #  Note: Can be helpful to mount multiple repositories in foreground
+RUN yum -y install \
+       epel-release && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 RUN yum -y install \
        supervisor && \
     yum clean all && \
