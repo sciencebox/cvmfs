@@ -2,6 +2,7 @@
 
 # Tag name
 BASE_TAG='gitlab-registry.cern.ch/sciencebox/docker-images/cvmfs'
+REGISTRY_URL='gitlab-registry.cern.ch'
 
 # Specify cvmfs version to be installed (or comment out to use the latest)
 CVMFS_VERSION='2.11.2'
@@ -16,6 +17,10 @@ else
 fi
 
 # Push the image to the GitLab registry
-docker login gitlab-registry.cern.ch
-docker push $TAG
-
+if [ $? -eq 0 ]; then
+  echo
+  echo
+  echo "Pushing image $TAG to $REGISTRY_URL"
+  docker login $REGISTRY_URL
+  docker push $TAG
+fi
