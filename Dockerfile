@@ -4,30 +4,30 @@ MAINTAINER Enrico Bocchi <enrico.bocchi@cern.ch>
 
 # Install supervisord
 #  Note: Can be helpful to mount multiple repositories in foreground
-RUN yum -y install \
+RUN dnf -y install \
        epel-release && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum -y install \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+RUN dnf -y install \
        supervisor && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Install essential packages for prefetching JupyROOT kernel from LCG views
-RUN yum -y install \
+RUN dnf -y install \
        gcc \
        gcc-c++ \
        util-linux \
        which && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Install CVMFS client
 ARG CVMFS_VERSION
 ADD ./repos.d/*.repo /etc/yum.repos.d/
-RUN yum -y install \
+RUN dnf -y install \
       cvmfs$CVMFS_VERSION \
       cvmfs-config-default && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
